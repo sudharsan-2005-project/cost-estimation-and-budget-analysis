@@ -1,0 +1,68 @@
+# Cost Estimation and Budget Analysis Program
+
+class BudgetAnalysis:
+    def __init__(self, initial_budget):
+        self.initial_budget = initial_budget  # Initial allocated budget
+        self.estimated_costs = {}  # Dictionary to hold cost categories and their estimates
+        self.actual_costs = {}  # Dictionary to hold actual costs
+        self.total_estimated_cost = 0
+        self.total_actual_cost = 0
+
+    def add_cost_estimate(self, category, estimate):
+        """ Add estimated costs for different project categories """
+        self.estimated_costs[category] = estimate
+        self.total_estimated_cost += estimate
+        print(f"Estimated cost for {category}: ${estimate}")
+
+    def add_actual_cost(self, category, actual):
+        """ Add actual costs incurred for the categories """
+        self.actual_costs[category] = actual
+        self.total_actual_cost += actual
+        print(f"Actual cost for {category}: ${actual}")
+
+    def compare_costs(self):
+        """ Compare estimated vs actual costs to identify budget discrepancies """
+        print("\nCost Comparison:")
+        print(f"{'Category':<20}{'Estimated':<15}{'Actual':<15}{'Difference':<15}")
+        print("-" * 65)
+        
+        for category in self.estimated_costs:
+            estimated = self.estimated_costs.get(category, 0)
+            actual = self.actual_costs.get(category, 0)
+            difference = actual - estimated
+            print(f"{category:<20}{estimated:<15}{actual:<15}{difference:<15}")
+
+        print(f"\nTotal Estimated Costs: ${self.total_estimated_cost}")
+        print(f"Total Actual Costs: ${self.total_actual_cost}")
+        print(f"Budget Variance: ${self.total_actual_cost - self.total_estimated_cost}")
+
+    def is_within_budget(self):
+        """ Check if the project is within the budget """
+        if self.total_actual_cost <= self.initial_budget:
+            print("\nThe project is within the budget.")
+        else:
+            print("\nThe project is over budget. Review needed!")
+
+# Example Usage
+if __name__ == "__main__":
+    # Initialize the budget analysis with an initial budget
+    initial_budget = 50000  # $50,000 allocated for the project
+    budget_analysis = BudgetAnalysis(initial_budget)
+
+    # Add estimated costs for different categories
+    budget_analysis.add_cost_estimate("Development", 20000)
+    budget_analysis.add_cost_estimate("Marketing", 10000)
+    budget_analysis.add_cost_estimate("IoT Devices", 5000)
+    budget_analysis.add_cost_estimate("Security", 5000)
+    budget_analysis.add_cost_estimate("Miscellaneous", 5000)
+
+    # Add actual costs for those categories
+    budget_analysis.add_actual_cost("Development", 21000)  # Overrun
+    budget_analysis.add_actual_cost("Marketing", 9500)  # Slight under
+    budget_analysis.add_actual_cost("IoT Devices", 5000)  # On target
+    budget_analysis.add_actual_cost("Security", 6000)  # Slight overrun
+    budget_analysis.add_actual_cost("Miscellaneous", 4500)  # Under target
+
+    # Compare the estimated vs actual costs and check the budget status
+    budget_analysis.compare_costs()
+    budget_analysis.is_within_budget()
